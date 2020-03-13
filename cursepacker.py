@@ -52,6 +52,9 @@ def downloadentry(entry, outdir):
 def downloadfile(url, localfile):
     with sess.get(url, stream=True) as r:
         r.raise_for_status()
+        parent_dir = os.path.dirname(localfile)
+        if parent_dir:
+            os.makedirs(parent_dir, exist_ok = True)
         with open(localfile, 'wb') as f:
             for chunk in r.iter_content(chunk_size=8192):
                 if chunk: # filter out keep-alive new chunks
